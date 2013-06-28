@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<!--框架必需start-->
+<script type="text/javascript" src="../../libs/js/jquery.js"></script>
+<script type="text/javascript" src="../../libs/js/framework.js"></script>
+<link href="../../libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+<link rel="stylesheet" type="text/css" id="customSkin"/>
+<!--框架必需end-->
+
+<!--去除虚线链接start-->
+<style>
+a {
+	behavior:url(../../libs/js/method/focus.htc)
+}
+</style>
+<!--去除虚线链接end-->
+</head>
+<body>
+
+<div id="scrollContent">
+<table width="100%">
+	<tr>
+		<td width="200" class="ver01">
+		<div class="singleNav">
+			<div class="current"><span><a href="../../sample/nav/nav-single-content1.html" target="frmrightChild">选项1</a></span></div>
+			<div><span><a href="../../sample/nav/nav-single-content2.html" target="frmrightChild">选项2</a></span></div>
+			<div><span><a href="../../sample/nav/nav-single-content1.html" target="frmrightChild">选项3</a></span></div>
+			<div><span><a href="../../sample/nav/nav-single-content2.html" target="frmrightChild">选项4</a></span></div>
+			<div><span><a href="../../sample/nav/nav-single-content1.html" target="frmrightChild">选项5</a></span></div>
+		</div>
+		
+		</td>
+		<td class="ver01">
+		<div class="box1">
+			<div class="cusBoxContent" style="overflow-y:auto;overflow-x:hidden;">
+		<IFRAME scrolling="no" width="100%" frameBorder=0 id=frmrightChild name=frmrightChild onload="iframeHeight('frmrightChild')" 
+			src="../../sample/nav/nav-single-content1.html" allowTransparency="true"></IFRAME>
+			</div>
+		</div>
+		</td>
+	</tr>
+</table>
+</div>	
+<script type="text/javascript">
+	function customHeightSet(){
+		$(".cusBoxContent").height($("#scrollContent").height()-50)
+	}
+</script>
+</body>
+</html>
