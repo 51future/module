@@ -1,0 +1,35 @@
+
+为什么要有脚本验证
+    确保用户输入数据完整。。。。。。。。。。
+描述:
+    为了方便程序员开发，统一做了javascript脚本验证。。。。。。。。。
+使用方法:
+    1 先引三个文件包，jquery.js,livevalidation.css,livevalidation.js
+    2 需要验证的字段内容，直接在class后面添加。比如不能为空，class="  notNull"
+    3 实例请到:\admin\public\validate_data.jsp 查看
+   。。。。。。。。。。。
+
+API 实例：
+ 。。。。。。。。。。。。。。。。。
+ 
+ 1
+ 
+ 
+ 
+ 
+ 
+ 
+ 		var f = validData();
+		var group_size = $("#cust_group_name").find("input").length;
+		var cust_size = $("#cust_name").find("input").length;
+		if( group_size == 0 && cust_size == 0){
+			$("#cust_group_name").addClass('LV_invalid_field');
+			$("#cust_group_name").after('<span class=" LV_validation_message LV_invalid">客户组和客户不能同时为空!</span>');
+			$("#cust_name").addClass('LV_invalid_field');
+			$("#cust_name").after('<span class=" LV_validation_message LV_invalid">客户组和客户不能同时为空!</span>');
+			f = false;
+			return;
+		}
+		if( f == false){
+			return;
+		}

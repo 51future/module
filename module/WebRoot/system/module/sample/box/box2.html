@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<!--框架必需start-->
+<script type="text/javascript" src="../../libs/js/jquery.js"></script>
+<script type="text/javascript" src="../../libs/js/framework.js"></script>
+<link href="../../libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" id="skin" prePath="../../"/>
+<link rel="stylesheet" type="text/css" id="customSkin"/>
+<!--框架必需end-->
+</head>
+<body>
+<div id="scrollContent">
+<div style="width:800px;">
+<fieldset style="border-color:#999999;">
+    <legend>1、基本示例：</legend>
+	<div class="box2" panelWidth="300" panelTitle="控制面板">
+		内容区域<br />内容区域<br />内容区域<br />
+		内容区域<br />内容区域<br />内容区域<br />
+	</div>
+</fieldset>
+<div class="height_15"></div>
+ 
+<fieldset style="border-color:#999999;">
+    <legend>2、初始时容器收缩：</legend>
+	<div class="box2" panelWidth="400" panelTitle="控制面板" statusText="展开">
+		内容区域<br />内容区域<br />内容区域<br />
+		内容区域<br />内容区域<br />内容区域<br />
+	</div>	
+</fieldset>
+<div class="height_15"></div>
+
+<fieldset style="border-color:#999999;">
+    <legend>3、自定义右上角标识和点击事件：</legend>
+	<div class="box2" panelWidth="400" panelTitle="控制面板" statusText="更多>>" panelUrl="javascript:openWin()">
+		内容区域<br />内容区域<br />内容区域<br />
+		内容区域<br />内容区域<br />内容区域<br />
+	</div>
+</fieldset>
+<div class="height_15"></div>
+
+<fieldset style="border-color:#999999;">
+    <legend>4、动态创建：</legend>
+	<input type="button"  value="点击创建" onclick="createBox()" id="testBtn"/>
+</fieldset>
+<div class="height_15"></div>		
+
+<fieldset style="border-color:#999999;">
+    <legend>5、动态修改属性：</legend>
+	<div class="box2" panelWidth="300" panelHeight="200"  panelTitle="控制面板" id="box6">这里修改了标题，宽度和高度属性</div>
+	<input type="button" value="点击修改" onclick="changeBox()"/>
+</fieldset>
+<div class="height_15"></div>	
+
+<fieldset style="border-color:#999999;">
+    <legend>6、面板状态改变事件：</legend>
+	<div class="box2" panelWidth="300" panelTitle="控制面板" id="box-6">
+		内容区域<br />内容区域<br />内容区域<br />
+		内容区域<br />内容区域<br />内容区域<br />
+	</div>
+</fieldset>
+<div class="height_15"></div>
+</div>	
+
+</div>	
+	<script>
+		$(function(){
+			$("#box-6").bind("stateChange",function(e,state){
+				alert(state);
+			});
+		})
+		
+		function openWin(){
+			alert("这是自定义事件")
+		}
+		function createBox(){
+			var $box=$('<div class="box2" panelWidth="300" panelHeight="150"  panelTitle="控制面板">内容部分</div>');
+			$("#testBtn").after($box);
+			$box.render();
+		}
+		function changeBox(){
+			$("#box6").attr("panelTitle","新标题");
+			$("#box6").attr("panelWidth",400);
+			$("#box6").attr("panelHeight",300);
+			$("#box6").render();
+		}
+	</script>
+</body>
+</html>
