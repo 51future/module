@@ -739,10 +739,6 @@ var Validate = {
 		} else {
 			Validate.fail(message);
 		}
-		//Validate.Format(value, { failureMessage: message, pattern: /^[\d-\(\)]{0,20}$/  } );
-		//Validate.Format(value, { failureMessage: message, pattern: /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/  } );  //座机电话
-		//Validate.Format(value, { failureMessage: message, pattern: /^(13[0-9]|15[0|1|2|3|6|7|8|9]|18[4|5|6|7|8|9])\d{8}$/  } );   //手机电话
-		//return true;
 	},
 	/**
 	 *	身份证号码验证
@@ -804,6 +800,20 @@ var Validate = {
 			return true;
 		}
 	},
+	
+	 /**
+     *	编号验证（规则：必须是数字或字母组合的字符串，或下划线）
+     */
+    CodeNum: function(value, paramsObj){
+    	var paramsObj = paramsObj || {};
+    	var message = paramsObj.failureMessage || "必须是数字或字母组合的字符串!";
+    	for (var i=0; i<value.length; i++){
+            if(!(/^([0-9]|[a-z]|[A-Z]|_)$/.test(value.charAt(i))))
+            	Validate.fail(message);
+        }
+    	return true;
+    },
+    
 	/**
 	 *	validates the length of the value
 	 *	
