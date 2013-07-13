@@ -17,10 +17,14 @@ function validation() {
 					});
 				} catch (e) {
 					valid = false;
-					$(this).addClass('LV_invalid_field');
-					$(this).after(
-							'<span class=" LV_validation_message LV_invalid">'
-									+ e.message + '</span>');
+					if ($(this).next('span')== null || $(this).next('span') == undefined ||$(this).next('span').html() == null) {
+						$(this).addClass('LV_invalid_field');
+						$(this).after('<span class=" LV_validation_message LV_invalid">'+ e.message + '</span>');
+						$(this).bind('keydown',function(){
+							$(".LV_invalid_field").removeClass("LV_invalid_field"); 
+						   	$(".LV_invalid").remove(); 
+						});
+					}
 				}
 			});
 
