@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.action.extension" value="action"/>
+    <constant name="struts.serve.static.browserCache" value="false"/>
+    <constant name="struts.configuration.xml.reload" value="true"/>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.ui.theme" value="simple" />
+    <constant name="struts.locale" value="en_GB" />
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.multipart.maxSize" value="52428800"/>
+ 	
+    <package name="global" extends="struts-default" namespace="/">
+		<global-results>
+			<result name="login" type="redirect">/loginPage.action</result>
+			<result name="error">/admin/public/error.jsp</result>
+			<result name="success">/admin/public/success.jsp</result>
+			<result name="noauth">/admin/public/noauth.jsp</result>
+		</global-results>
+		
+		<global-exception-mappings>  
+			<exception-mapping result="error" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>  
+				
+		<!-- 登录页面 -->
+		<action name="loginPage" class="com.jinxinol.basic.system.web.LoginAction" method="loginPage">
+			<result name="login">/login.jsp</result>
+			<result name="index" type="redirect">/admin/public/index.jsp</result>
+		</action>
+		
+		<!-- 登录系统action -->
+		<action name="login" class="com.jinxinol.basic.system.web.LoginAction" method="login">
+			<result name="login">/login.jsp</result>
+			<result name="success" type="redirect">/index.action</result>
+		</action>
+		
+		<!-- 退出系统action -->
+		<action name="logout" class="com.jinxinol.basic.system.web.LogoutAction" method="logout">
+			<result name="compel_logout">/admin/basic/system/basicdata/showAliveUser.jsp</result>
+		</action>
+		
+		<action name="index" class="com.jinxinol.core.common.Nop">
+			<result>/admin/public/index.jsp</result>
+		</action>
+		
+		<action name="tabs" class="com.jinxinol.core.common.Nop">
+			<result>/admin/public/tabs.jsp</result>
+		</action>
+	</package>
+    
+ 	<!-- 系统模块配置文件 -->
+ 	<include file="com/jinxinol/basic/system/config/struts_basic_system.xml" />
+ 	<!-- 工作流引擎配置文件 -->
+ 	<include file="com/jinxinol/workflow/base/config/struts_workflow_base.xml" />
+ 	<include file="com/jinxinol/workflow/cases/config/struts_workflow_cases.xml" />
+</struts>

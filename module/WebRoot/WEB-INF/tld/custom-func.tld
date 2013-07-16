@@ -13,7 +13,7 @@
 	<function>
 		<description>substring</description>
 		<name>substring</name>
-		<function-class>com.jinxinol.core.custom.func.TestFunc</function-class>
+		<function-class>com.bin.acode.custom.func.TestFunc</function-class>
 		<function-signature>java.lang.String substring( java.lang.String, int )</function-signature>
 		<example>
 	      ${cf:substring("aaaaaaa",2)}

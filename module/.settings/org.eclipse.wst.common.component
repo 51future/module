@@ -2,6 +2,12 @@
     <wb-module deploy-name="module">
         <wb-resource deploy-path="/" source-path="/WebRoot" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-bin-acode"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-bin-basic"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-bin-flows"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-bin-other"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-bin-ports"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-bin-xfile"/>
         <property name="context-root" value="module"/>
         <property name="java-output-path" value="/module/build/classes"/>
     </wb-module>

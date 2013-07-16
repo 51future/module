@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="useGeneratedKeys" value="true"/>
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <setting name="lazyLoadingEnabled" value="false"/>
+    </settings>
+    
+    <!-- 配置别名 -->
+    <typeAliases>
+    	<!-- =============================系统管理============================= -->
+    	<typeAlias alias="SysArea" type="com.jinxinol.basic.system.domain.SysArea"/>
+    	<typeAlias alias="SysModule" type="com.jinxinol.basic.system.domain.SysModule"/>
+		<typeAlias alias="SysAttachment" type="com.jinxinol.basic.system.domain.SysAttachment"/>
+		<typeAlias alias="SysConfig" type="com.jinxinol.basic.system.domain.SysConfig"/>
+		<typeAlias alias="SysDictItem" type="com.jinxinol.basic.system.domain.SysDictItem"/>
+		<typeAlias alias="SysDictType" type="com.jinxinol.basic.system.domain.SysDictType"/>
+		<typeAlias alias="SysOrg" type="com.jinxinol.basic.system.domain.SysOrg"/>
+		<typeAlias alias="SysPosition" type="com.jinxinol.basic.system.domain.SysPosition"/>
+		<typeAlias alias="SysRight" type="com.jinxinol.basic.system.domain.SysRight"/>
+		<typeAlias alias="SysRole" type="com.jinxinol.basic.system.domain.SysRole"/>
+		<typeAlias alias="SysRoleRight" type="com.jinxinol.basic.system.domain.SysRoleRight"/>
+		<typeAlias alias="SysSeqsNo" type="com.jinxinol.basic.system.domain.SysSeqsNo"/>
+		<typeAlias alias="SysUser" type="com.jinxinol.basic.system.domain.SysUser"/>
+		<typeAlias alias="SysUser1" type="com.jinxinol.basic.system.domain.SysUser1"/>
+		<typeAlias alias="SysUserRole" type="com.jinxinol.basic.system.domain.SysUserRole"/>
+		<typeAlias alias="SysUserRight" type="com.jinxinol.basic.system.domain.SysUserRight"/>
+		<typeAlias alias="SysBizLog" type="com.jinxinol.basic.system.domain.SysBizLog"/>
+		<typeAlias alias="SysOrgUserTreeNode" type="com.jinxinol.basic.system.domain.SysOrgUserTreeNode"/>
+		
+		<!-- =============================工作流程引擎============================= -->
+		<typeAlias alias="BpmProcessType" type="com.jinxinol.workflow.base.domain.BpmProcessType"/>
+		<typeAlias alias="BpmProcessInfo" type="com.jinxinol.workflow.base.domain.BpmProcessInfo"/>
+		<typeAlias alias="BpmAppSystem" type="com.jinxinol.workflow.base.domain.BpmAppSystem"/>
+		<typeAlias alias="BpmProinsBillShip" type="com.jinxinol.workflow.base.domain.BpmProinsBillShip"/>
+		<typeAlias alias="ActIdGroup" type="com.jinxinol.workflow.base.domain.ActIdGroup"/>
+		<typeAlias alias="ActIdUser" type="com.jinxinol.workflow.base.domain.ActIdUser"/>
+		<typeAlias alias="ActIdMemberShip" type="com.jinxinol.workflow.base.domain.ActIdMemberShip"/>
+		<typeAlias alias="ActHiComment" type="com.jinxinol.workflow.base.domain.ActHiComment"/>
+		<typeAlias alias="ActHiDetail" type="com.jinxinol.workflow.base.domain.ActHiDetail"/>
+		<typeAlias alias="ActHiProcinst" type="com.jinxinol.workflow.base.domain.ActHiProcinst"/>
+		<typeAlias alias="ActHiTaskinst" type="com.jinxinol.workflow.base.domain.ActHiTaskinst"/>
+		<typeAlias alias="ActRuIdentitylink" type="com.jinxinol.workflow.base.domain.ActRuIdentitylink"/>
+		<typeAlias alias="ActRuTask" type="com.jinxinol.workflow.base.domain.ActRuTask"/>
+		<typeAlias alias="ProTaskGroup" type="com.jinxinol.workflow.entity.ProTaskGroup"/>
+		<!-- =============================流程案例CASES============================= -->
+		<typeAlias alias="CasHrDemand" type="com.jinxinol.workflow.cases.domain.CasHrDemand"/>
+		<typeAlias alias="CasLeaveApply" type="com.jinxinol.workflow.cases.domain.CasLeaveApply"/>
+		<typeAlias alias="CasMeetingApply" type="com.jinxinol.workflow.cases.domain.CasMeetingApply"/>
+		<typeAlias alias="CasMeetingUser" type="com.jinxinol.workflow.cases.domain.CasMeetingUser"/>
+		
+    </typeAliases>
+</configuration>

@@ -11,7 +11,7 @@
 	<display-name>自定义标签</display-name>
 	<tag>
 		<name>test</name>
-		<tag-class>com.jinxinol.core.custom.tags.TestTag</tag-class>
+		<tag-class>com.bin.acode.custom.tags.TestTag</tag-class>
 		<body-content>JSP</body-content>
 		<description>测试标签</description>
 		<attribute>
