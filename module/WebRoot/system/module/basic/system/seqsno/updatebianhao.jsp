@@ -11,9 +11,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>设备管理系统</title>
 		<jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
-		<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+		<jsp:include page="/admin/common/load_module_combox_tree.jsp"></jsp:include>
+		<script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
 		<script type="text/javascript" src="<%=basePath %>js/lib/check/check.js"></script>
 		<script type="text/javascript">
+		//添加系统模块属性
+		$(function(){
+			var moduleTreeBox = new ModuleComboxTree({
+				idFieldId: 'module_id',
+				nameFieldId: 'module_name'
+			});
+		});
 		//----当用户选择启用公司代码时，显示公司代码输入框-----------
 		$(document).ready(function (){
 			$("#sec_code_flag").change(function () {
@@ -57,6 +65,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 		}
 		</script>
+		<style type="text/css">
+			.box{
+				width: 300px;
+				height: auto;
+				border-color: red;
+			}
+		</style>
 	</head>
 	<body>
 	<div class="title">修改单据编码</div>
@@ -65,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<table>
   			<tr>
 		  	  <td align="right"><font color="#FF0000">*</font>业务单据编码</td>
-		  	  <td><input type="text" name="sysSeqsNo.order_type" isnull="true" id="name" value="${sysSeqsNo.order_type}" /><span id="d_name" style="color:red;"></span>
+		  	  <td><input type="text" disabled="disabled" name="sysSeqsNo.order_type" isnull="true" id="name" value="${sysSeqsNo.order_type}" /><span id="d_name" style="color:red;"></span>
 		  	  	  <input type="hidden" name="old" id="oldname" value="${sysSeqsNo.order_type}" />
 		  	  </td>
   			</tr>
@@ -116,7 +131,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			</td>
 		  	  </s:if>
 		  	   <s:if test='sysSeqsNo.year_month_flag=="Y" '>
-		  	  	  <td><select name="sysSeqsNo.year_month_flag" id="year_month_flag">
+		  	  	  <td><select name="sysSeqsNo.year_month_flag" id="year_month_flag" style="width:155px;">
 		    	  <option value="N">不启用</option>
 		    	  <option value="Y" selected="selected">启用年月</option>
 		    	  </select>
@@ -124,13 +139,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  	  </s:if>
   			</tr>
   			<tr>
+		  		<td align="right">所属业务模块</td>
+		  		<td>
+					<div class="box">
+						<input type="text" name="sysSeqsNo.module_name" id="module_name" value="${sysSeqsNo.module_name }"/>
+						<input type="hidden" name="sysSeqsNo.module_id" id="module_id" value="${sysSeqsNo.module_id }"/>
+					</div>
+			  	</td>
+			  </tr>
+  			<tr>
   		 	   <td align="right"><font color="#FF0000">*</font>流水序列长度</td>
   		 	   <td><input type="text" name="sysSeqsNo.seq_length" isnull="true" checktype="+int" id="seq_length" value="${sysSeqsNo.seq_length}" /></td>
 	 		</tr>
   		<tr>
   		  <td align="right">编码用途说明</td>
   		  <td><textarea name="sysSeqsNo.comments" id="textarea" cols="45" rows="3">${sysSeqsNo.comments}</textarea>
-  		  	<input type="hidden" name="sysSeqsNo.order_type_no" value="${sysSeqsNo.order_type_no}"/>
   		  </td>
 	  </tr>
 	</table>

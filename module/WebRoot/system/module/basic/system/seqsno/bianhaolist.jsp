@@ -11,8 +11,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>设备管理系统</title>
 		<jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
-		<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+		<jsp:include page="/admin/common/load_module_combox_tree.jsp"></jsp:include>
 		<script type="text/javascript" src="<%=basePath%>js/public.js"></script>
+		<script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
+		<script type="text/javascript" src="<%=basePath %>js/lib/check/check.js"></script>
+		<script type="text/javascript">
+			//添加系统模块属性
+		$(function(){
+				var moduleTreeBox = new ModuleComboxTree({
+					idFieldId: 'module_id',
+					nameFieldId: 'module_name'
+				});
+			});
+		</script>
+		<style type="text/css">
+			.box{
+				width: 300px;
+				height: auto;
+				border-color: red;
+			}
+		</style>
 	</head>
 	<body>
 	<form action="<%=basePath%>basic/sys/sysseqsno_findAllSSN.action" id="sf" method="post">
@@ -27,13 +45,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td>
 						<input type="text" name="sysSeqsNo.order_type" value="${sysSeqsNo.order_type}"/>
 					</td>
-					<th>公司编码</th>
+					<th>所属模块</th>
 					<td>
-						<select name="sysSeqsNo.sec_code_flag" id="sec_code_flag" class="downMenu">
-						  <option value="" selected="selected">--请选择--</option>
-				     	  <option value="N" <s:if test=' sysSeqsNo.sec_code_flag =="N" '>selected</s:if>>不启用</option>
-				     	  <option value="Y" <s:if test=' sysSeqsNo.sec_code_flag =="Y" '>selected</s:if>>启用</option>
-		         	   </select>
+							<input type="text" name="sysSeqsNo.module_name" id="module_name" value="${sysSeqsNo.module_name }"/>
+							<input type="hidden" name="sysSeqsNo.module_id" id="module_id" value="${sysSeqsNo.module_id }"/>
 					</td>
 				</tr>
 				<tr>
@@ -45,15 +60,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    	  <option value="Y" <s:if test=' sysSeqsNo.year_month_flag =="Y" '>selected</s:if>>启用年月</option>
 				    	</select>
 					</td>
-					<th>编码用途</th>
+					<th>公司编码</th>
 					<td>
-						<input type="text" name="sysSeqsNo.comments" value="${sysSeqsNo.comments}"/>
+						<select name="sysSeqsNo.sec_code_flag" id="sec_code_flag" class="downMenu">
+						  <option value="" selected="selected">--请选择--</option>
+				     	  <option value="N" <s:if test=' sysSeqsNo.sec_code_flag =="N" '>selected</s:if>>不启用</option>
+				     	  <option value="Y" <s:if test=' sysSeqsNo.sec_code_flag =="Y" '>selected</s:if>>启用</option>
+		         	   </select>
 					</td>
 					<th></th>
 					<td>
 						<span class="btn"><input type="submit" id="searchBtn" value="查询"/></span>
 						<span class="btn">
-							<input type="button" value="新增单据编码" 
+							<input type="button" value="新增" 
 								onclick="javascript:window.location.href = '<%=basePath%>admin/basic/system/seqsno/bianhao.jsp'"/>
 						</span>
 					</td>
@@ -69,6 +88,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td>公司编码</td>
 						<td>年月序列</td>
 						<td>流水长度</td>
+						<td>所属模块</td>
 						<td>编码用途</td>
 						<td>操作</td>
 					</tr>
@@ -77,17 +97,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<s:iterator value="%{pm.list }">
 			<tr>
         		<td class="tdLeft">${order_type_no}</td>
-        		<td>${order_type}</td>
-        		<td>
+        		<td class="tdLeft">${order_type}</td>
+        		<td class="tdLeft">
         			<s:if test=' sec_code_flag =="Y" '>启用</s:if>
         			<s:if test=' sec_code_flag =="N" '>不启用</s:if>
         		</td>
-        		<td>
+        		<td class="tdLeft">
         			<s:if test=' year_month_flag =="Y" '>启用</s:if>
         			<s:if test=' year_month_flag =="N" '>不启用</s:if>
         		</td>
-        		<td>${seq_length}</td>
-        		<td align="left">${comments}</td>
+        		<td class="tdLeft">${seq_length}</td>
+        		<td class="tdLeft">${module_name}</td>
+        		<td class="tdLeft">${comments}</td>
         		<td>
 	        		<a href="<%=basePath %>basic/sys/sysseqsno_deleteS.action?id=${order_type_no}" class="del" onclick="return confirm('此操作不可恢复，确定删除吗？')" title="点击删除本条信息">删除</a>
 	        		<a href="<%=basePath %>basic/sys/sysseqsno_findByIdS.action?id=${order_type_no}" class="modi" title="点击查看或修改该单据">修改</a>

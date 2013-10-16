@@ -9,23 +9,33 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
+<jsp:include page="/admin/common/load_module_combox_tree.jsp"></jsp:include>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/validation/css/livevalidation.css"/>
 <script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
 <script language="javascript">
+//添加系统模块属性
+$(function(){
+	var moduleTreeBox = new ModuleComboxTree({
+		idFieldId: 'module_id',
+		nameFieldId: 'module_name'
+	});
+});
+
 $(function(){
 	checkAll();
 });
+
 function checkAll(){
 	var name = new LiveValidation('name',{onlyOnSubmit:true});
 	name.add( Validate.Presence, {failureMessage: "不能为空!"});
 	name.add( Validate.Length, { maximum: 100} );
-	var value_type = new LiveValidation('value_type',{onlyOnSubmit:true});
-	value_type.add( Validate.Presence, {failureMessage: "不能为空!"});
+	
+	
 	var key = new LiveValidation('key',{onlyOnSubmit:true});
 	key.add( Validate.Presence, {failureMessage: "不能为空!"});
 	key.add( Validate.Length, { maximum: 50} );
+	
 	var value = new LiveValidation('value',{onlyOnSubmit:true});
 	value.add( Validate.Presence, {failureMessage: "不能为空!"});
 	value.add( Validate.Length, { maximum: 500} );
@@ -35,6 +45,14 @@ function goback(){
 	window.location = "<%=basePath%>basic/sys/config_toConfigPage.action";
 }
 </script>
+
+<style type="text/css">
+	.box{
+		width: 300px;
+		height: auto;
+		border-color: red;
+	}
+</style>
 </head>
 <body>
 	<div class="title">编辑系统参数（上传文件目录）</div>
@@ -82,6 +100,15 @@ function goback(){
 						<s:if test="%{sysConfig.visible==2}">是</s:if>
 					</td>
 				</tr>
+				<tr>
+			  		<th>所属业务模块</th>
+			  		<td>
+						<div class="box">
+							<input type="text" name="sysConfig.module_name" id="module_name" value="${sysConfig.module_name }"/>
+							<input type="hidden" name="sysConfig.module_id" id="module_id" value="${sysConfig.module_id }"/>
+						</div>
+				  	</td>
+				 </tr>
 				<tr>
 					<th>备注说明</th>
 					<td>

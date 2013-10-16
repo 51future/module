@@ -10,9 +10,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<jsp:include page="/admin/common/load_module_combox_tree.jsp"></jsp:include>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
 <script language="javascript">
+//添加系统模块属性
+$(function(){
+	var moduleTreeBox = new ModuleComboxTree({
+		idFieldId: 'module_id',
+		nameFieldId: 'module_name'
+	});
+});
 if("${operResult}"=="true"){
 	alert("操作成功");
 }
@@ -34,6 +41,11 @@ function addConfig(typeid){
 					<td><input type="text" name="sysConfig.name" value="${sysConfig.name }" /></td>
 					<th>参数代码</th>
 					<td><input type="text" name="sysConfig.key" value="${sysConfig.key }" /></td>
+					<th>所属系统</th>
+					<td>
+						<input type="text" name="sysConfig.module_name" id="module_name" value="${sysConfig.module_name }"/>
+						<input type="hidden" name="sysConfig.module_id" id="module_id" value="${sysConfig.module_id }"/>
+					</td>
 					<td>
 						<span class="btn"><input type="submit" name="button" id="button" value="查询" /></span>
 						<span class="btn"><input type="button" name="button" id="button" value="添加" onclick="addConfig()" /></span>
@@ -49,6 +61,7 @@ function addConfig(typeid){
 						<td>参数名称</td>
 						<td>参数代码</td>
 						<td>参数值</td>
+						<td>所属模块</td>
 						<td>备注说明</td>
 						<td>是否可编辑</td>
 						<td>是否可见</td>
@@ -62,6 +75,7 @@ function addConfig(typeid){
 							<td class="tdLeft">${name }</td>
 							<td class="tdLeft">${key }</td>
 							<td class="tdLeft">${value }</td>
+							<td class="tdLeft">${module_name }</td>
 							<td title="${remark }" class="tdLeft">${fn:substring(remark,0,15)}</td>
 							<td>
 								<s:if test="%{editable==2}">

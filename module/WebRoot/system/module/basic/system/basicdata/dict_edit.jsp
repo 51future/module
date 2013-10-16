@@ -12,7 +12,7 @@
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/validation/css/livevalidation.css"/>
 <script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
 <script language="javascript">
 $(function(){
@@ -72,14 +72,15 @@ function goback(){
 						</td>
 					</tr>
 					<tr>
-						<th><font>*</font>是否有效</th>
+						<th><font>*</font>启用状态</th>
 						<td>
 							<select name="sysDictItem.enable" id="enable" style="width:155px;">
-								<option value="1">否</option>
-								<option value="2" <s:if test="%{sysDictItem.enable == 2}">selected</s:if>>是</option>
+								<option value="1">禁用</option>
+								<option value="2" <s:if test="%{sysDictItem.enable == 2}">selected</s:if>>启用</option>
 							</select>
 						</td>
 					</tr>
+					<!-- 
 					<tr>
 						<th><font>*</font>参数类别</th>
 						<td><select name="sysDictItem.issys" id="issys" style="width:155px;">
@@ -87,6 +88,7 @@ function goback(){
 								<option value="1" <s:if test="%{sysDictItem.issys == 1}">selected</s:if>>用户定义</option>
 							</select></td>
 					</tr>
+					 -->
 					<tr>
 						<th>内容描述</th>
 						<td>

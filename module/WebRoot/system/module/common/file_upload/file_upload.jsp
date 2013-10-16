@@ -1,5 +1,4 @@
 <%@page import="java.util.Date"%>
-<%@page import="org.activiti.engine.impl.interceptor.Session"%>
 <%@ page language="java" pageEncoding="utf-8"%>
 <%
 	String path = request.getContextPath();
@@ -19,7 +18,7 @@
 <style type="text/css">
 	#mask{width:100%; height:100%; position:absolute; top:0px; left:0px; background-color:#FFF; filter:alpha(opacity=70); opacity:0.7; z-index:65534;}
 </style>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/lib/jquery/form/jquery.form.js"></script>
 <script type="text/javascript" src="<%=basePath%>admin/common/file_upload/file_upload.js"></script>
 

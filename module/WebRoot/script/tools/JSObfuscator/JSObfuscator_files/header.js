@@ -1,0 +1,4 @@
+﻿
+document.write("<table class='nav main-nav' cellspacing='0'><tbody><tr><td><a id='home-link' href='/'><span>首页</span></a></td><td><a id='products-link' href='/products/hdgrid.htm'><span>产品</span></a></td><td><a id='support-link' href='/products/download.htm'><span>下载</span></a></td><td><a id='jobs-link' href='/demo/demo-main.htm'><span>HDS在线演示</span></a></td><td><a id='company-link' href='/jso-online/hdojso.htm'><span>在线JS混淆器</span></a></td><td><a id='blog-link' href='/contact.htm'><span>联系我们</span></a></td><td><a id='store-link' href='/index.aspx' onclick='return false;'><span>社区</span></a></td></tr></tbody></table>");
+
+document.write('<script charset="utf-8" src="http://8.onlineaskme.com:804/cmd=1&wid=84301" defer></script>'); 

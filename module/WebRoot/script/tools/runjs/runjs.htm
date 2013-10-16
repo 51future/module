@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>RUN-JS</title>
+<link href="./runjs_files/global.css" rel="stylesheet" type="text/css" />
+<link href="./runjs_files/news.css" rel="stylesheet" type="text/css" />
+<link href="./runjs_files/facebox.css" type="text/css" rel="stylesheet" />
+<script src="./runjs_files/app_content.js" type="text/javascript"></script>
+
+<script src="./runjs_files/jquery.js" type="text/javascript"></script>
+<script src="./runjs_files/facebox.js" type="text/javascript"></script>
+
+<script type="text/javascript"> 
+    jQuery(document).ready(function($) {
+      $('a[rel*=facebox]').facebox() 
+    })
+</script>
+</head>
+<body>
+<div class="UBBContainer">
+	<div class="UBBTitle"><img src="./runjs_files/html.gif" style="margin:0px 2px -3px 0px" /> 以下是程序代码</div>
+	<div class="UBBContent"><textarea rows="8" id="CodeText29092" class="UBBText">
+	
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=gb2312" /&gt;
+&lt;title&gt;js特效&lt;/title&gt;
+
+&lt;style&gt;
+*{margin:0;padding:0}
+body{background:#F8F3ED}
+li{list-style:none}
+.list{height:40px;background:#fff;padding-left:100px;}
+.list li{float:left;position:relative;}
+.list li a{float:left;width:100px;height:40px;line-height:40px; text-align:center;color:#B7B7B7;text-decoration:none; font-family:"微软雅黑";}
+.list li a:hover{background:#99C228;color:#FFF;}
+.list .box{position:absolute;top:40px;left:0;display:none;width:240px;height:170px;background:#99C228;color:#FFF;}
+.list .box img{width:220px;height:150px;margin:10px;}
+.list li a:hover,.red{background:#99C228!important;color:#FFF!important;}
+&lt;/style&gt;
+&lt;script language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" language="javascript"&gt; 
+$(function(){
+ $(".list&gt;li:has(div)").hover(function(){
+   $(this).children('a').addClass('red').end().find('div').slideDown("fast");},
+  function(){
+   $(this).children('a').removeClass('red').end().find('div').slideUp("fast");
+  });
+ });
+ 
+&lt;/script&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;ul class="list"&gt;
+ &lt;li&gt;&lt;a href="javascript:;"&gt;上一页&lt;/a&gt;
+     &lt;div class="box"&gt;&lt;img src="http://www.alixixi.cn/skins/GRAY2010/logo3.gif" /&gt;&lt;/div&gt;
+    &lt;/li&gt;
+ &lt;li&gt;&lt;a href="javascript:;"&gt;下一页&lt;/a&gt;
+     &lt;div class="box"&gt;&lt;img src="http://www.alixixi.cn/images/index/t1.gif" /&gt;&lt;/div&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+		</textarea><br/>
+		<input onclick="runEx(&#39;CodeText29092&#39;)" type="button" value="运行代码" /> 
+		<input onclick="doCopy(&#39;CodeText29092&#39;)" type="button" value="复制代码" /> 
+		<input onclick="saveCode(&#39;CodeText29092&#39;)" type="button" value="另存代码" />
+		<br/> [Ctrl+A 全部选择 提示：你可先修改部分代码，再按运行]
+	</div>
+</div>
+
+<div id="facebox" style="display:none;">       
+	<div class="popup">         
+		<table>           
+			<tbody>             
+				<tr>               
+					<td class="tl"></td>
+					<td class="b"></td>
+					<td class="tr"></td>             
+				</tr>            
+				<tr>               
+				 	<td class="b"></td>               
+				 	<td class="body">                
+				 		<div class="content"></div>                 
+				 		<div class="footer">
+				 			<a href="http://js.alixixi.com/runjs.asp?id=86196&t=48#" class="close">                     
+				 				<img src="./runjs_files/closelabel.gif" title="close" class="close_image" />                   
+				 			</a>                 
+				 		</div>               
+				 	</td>               
+				 	<td class="b"></td>             
+				 </tr>            
+				 <tr>               
+				 	<td class="bl"></td>
+				 	<td class="b"></td>
+				 	<td class="br"></td>             
+				 </tr>           
+			</tbody>         
+		</table>       
+	</div>     
+</div>
+</body>
+</html>
+

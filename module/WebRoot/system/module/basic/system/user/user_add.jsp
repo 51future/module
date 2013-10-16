@@ -9,23 +9,57 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/validation/css/livevalidation.css"/>
-<script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<link type="text/css" href="<%=basePath%>js/lib/jquery/easyui/themes/icon.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="<%=basePath%>style/icon.css"/>
+<script type="text/javascript" src="<%=basePath%>js/jx/JXCore.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/easyui/jquery.easyui.min.js"></script>
 
 <script type="text/javascript" src="<%=basePath%>js/lib/jquery/zTree/js/jquery.ztree.core-3.3.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/zTree/js/jquery.ztree.excheck-3.3.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/zTree/js/jquery.ztree.exedit-3.3.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/jx/combox/load_org_combox_tree.js" ></script>
 <link rel="stylesheet" href="<%=basePath%>js/lib/jquery/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>style/zTreeStyle-extend.css"/>
+
+<jsp:include page="/admin/common/auto_load_user.jsp"></jsp:include>
 <script language="javascript">
+var basePath = '<%=basePath%>';
+
 $(function(){
 	checkAll();
+	
+	var userAutoComplete = new UserAutoComplete({
+		user_name: 'auto_user_name',
+		user_id: 'auto_user_id'
+	});
+	
+	//加载组织部门
+	var orgTreeBox = new OrgComboxTree({
+		idFieldId: 'org_id',
+		nameFieldId: 'org_name',
+		onNodeClick: function (e, treeId, treeNode){
+			if(treeNode.org_id >0){
+				$("#" + this.idFieldId).val(treeNode.org_id);
+				$("#" + this.nameFiledId).val(treeNode.org_name);
+				$("#area_name").val(treeNode.area_name);
+				$("#area_id").val(treeNode.area_id);
+				loadPosition();
+				this.hideTreeBox();
+			}
+		}
+	});
+	
 });
 
 function checkAll(){
-	var user_account_lv = new LiveValidation('user_account',{onlyOnSubmit:true});
-	user_account_lv.add( Validate.Presence, {failureMessage: "不能为空!"});
-	user_account_lv.add( Validate.Length, { maximum: 30} );
-	user_account_lv.add( Validate.Custom, { failureMessage: '登录账号已经存在！', against: function(value, args){
+	var user_account = new LiveValidation('user_account',{onlyOnSubmit:true});
+	user_account.add( Validate.Presence, {failureMessage: "不能为空!"});
+	user_account.add( Validate.Length, { maximum: 100} );
+	user_account.add(Validate.CodeNum,{});
+	user_account.add( Validate.Custom, { failureMessage: '登录账号已经存在！', against: function(value, args){
 		var valid = 'true';
 		var params = {
 			'user.user_account': $('#user_account').val(),
@@ -40,20 +74,20 @@ function checkAll(){
 		return (valid == 'true');
 	}});
 	
-	var user_type =  new LiveValidation('user_type',{onlyOnSubmit:true});
+	var user_code = new LiveValidation('user_code',{onlyOnSubmit:true});
+	user_code.add(Validate.Presence,{failureMessage:"不能为空!"});
+	user_code.add(Validate.Length,{maximum:100});
+	user_code.add(Validate.CodeNum,{});
+	
+	var user_type = new LiveValidation('user_type',{onlyOnSubmit:true});
 	user_type.add( Validate.Presence, {failureMessage: "不能为空!"});
 	
 	var user_name = new LiveValidation('user_name',{onlyOnSubmit:true});
 	user_name.add( Validate.Presence, {failureMessage: "不能为空!"});
-	
-	var gender = new LiveValidation('gender',{onlyOnSubmit:true});
-	gender.add( Validate.Presence, {failureMessage: "不能为空!"});
+	user_name.add( Validate.Length, { maximum: 30} );
 	
 	var org_name = new LiveValidation('org_name',{onlyOnSubmit:true});
 	org_name.add( Validate.Presence, {failureMessage: "不能为空!"});
-	
-	var dept_name = new LiveValidation('dept_name',{onlyOnSubmit:true});
-	dept_name.add( Validate.Presence, {failureMessage: "不能为空!"});
 	
 	var pos_id = new LiveValidation('pos_id',{onlyOnSubmit:true});
 	pos_id.add( Validate.Presence, {failureMessage: "不能为空!"});
@@ -65,190 +99,30 @@ function checkAll(){
 	var email = new LiveValidation('email',{onlyOnSubmit:true});
 	email.add( Validate.Email, {failureMessage: "邮箱地址不合法!"});
 	
-	var area_name = new LiveValidation('area_name',{onlyOnSubmit:true});
-	area_name.add( Validate.Presence, {failureMessage: "不能为空!"});
+	var address = new LiveValidation('address',{onlyOnSubmit:true});
+	address.add( Validate.Length, { maximum: 150} );
 	
-}
-/*
-function chooseOrgan(){
-	var url = '<%=basePath%>admin/basic/system/dep/organ_choose.jsp'; 
-	window.callback = fillOrgan;
-	openModalWindow(url, window, 'small');
+	var remark = new LiveValidation('remark',{onlyOnSubmit:true});
+	remark.add( Validate.Length, { maximum: 150} );
 }
 
-function fillOrgan(orgId, orgName){
-	$('input[name="user.org_id"]').val(orgId);
-	$('input[name="user.org_name"]').val(orgName);
-	
-	var params = {
-		ct: (new Date()).getTime(),
-		'pos.org_id': orgId
-	};
-	
-	$.getJSON("<%=basePath%>basic/sys/orgpos_loadPositionJSON.action", params, function(json){
-		if(json.resultCode == 'success'){
-			$('#pos_id').empty();
-			$('#pos_id').append('<option value="">--请选择--</option>');
-			for(var i=0; i<json.list.length; i++){
-				$('#pos_id').append('<option value="' + json.list[i].pos_id + '">' + json.list[i].pos_name + '</option>');
-			}
-		}
-	});
-	
-}
-*/
-var mode_demo='';
-var class_id='';
-var class_name='';
-var menuContent='';
-var com_list=null;
-var ids = '';
-var types = '';
-function chooseOrgan(ulId,org_ids,org_name,divId,type,ids){
-	mode_demo = ulId;
-	class_id = org_ids;
-	class_name = org_name;
-	menuContent = divId;
-	ids = ids;
-	types = type;
-	com_list = null;
-	if(com_list==null){
-		//加载组织数据
-		$.ajaxSetup({async: false});
-		$.getJSON("<%=basePath%>basic/sys/orgpos_loadOrg.action", {'org.org_type':type,ct: (new Date()).getTime()}, function(json){
-			if(json.resultCode == 'success'){
-				if(json.list.length > 0){
-					json.list[0].open = true;
-					json.list[0].nocheck = true;
-					com_list = json.list;
-				}
-			}else{
-				alert("加载组织失败!");
-			}
-		}); 
-	}
-	$.fn.zTree.init($("#"+mode_demo), setting, com_list);
-	//获取文本框的偏移位置和高度
-	var cityObj = $("#"+class_name);
-	var cityOffset = $("#"+class_name).offset();
-	$("#"+menuContent).css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-	$("body").bind("mousedown", clickBodyDown);
-}
-//选择部门
-function chooseOrgan2(ulId,org_ids,org_name,divId,type){
+//加载职务
+function loadPosition(){
 	ids = $("#org_id").val();
 	if(ids == ''){
-		alert("请先选择组织!");
+		alert("请先选择所属组织！");
 		return ;
 	}
-	mode_demo = ulId;
-	class_id = org_ids;
-	class_name = org_name;
-	menuContent = divId;
-	types = type;
-	com_list = null;
-	if(com_list==null){
-		//加载组织数据
-		$.ajaxSetup({async: false});
-		$.getJSON("<%=basePath%>basic/sys/orgpos_loadOrg.action", {'org.parent_id':ids,ct: (new Date()).getTime()}, function(json){
-			if(json.resultCode == 'success'){
-				if(json.list.length > 0){
-					json.list[0].open = true;
-					json.list[0].nocheck = true;
-					com_list = json.list;
-				}
-			}else{
-				alert("加载组织失败!");
-			}
-		}); 
-	}
-	$.fn.zTree.init($("#"+mode_demo), setting, com_list);
-	//获取文本框的偏移位置和高度
-	var cityObj = $("#"+class_name);
-	var cityOffset = $("#"+class_name).offset();
-	$("#"+menuContent).css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-	$("body").bind("mousedown", clickBodyDown);
-}
-
-//选择职位
-function choosePost(){
-	ids = $("#dept_id").val();
-	if(ids == ''){
-		alert("请先选择部门!");
-		return ;
-	}
-	$.getJSON("<%=basePath%>basic/sys/orgpos_loadPositionJSON.action", {'pos.org_id': ids, ct: (new Date()).getTime()}, function(json){
+	$.getJSON("<%=basePath%>basic/sys/pos_loadPositionForOrg.action", {'pos.org_id': ids, ct: (new Date()).getTime()}, function(json){
 		if(json.resultCode == 'success'){
 			$('#pos_id').empty();
 			$('#pos_id').append('<option value="">--请选择--</option>');
-			for(var i=0; i<json.list.length; i++){
-				$('#pos_id').append('<option value="' + json.list[i].pos_id + '">' + json.list[i].pos_name + '</option>');
+			for(var i=0; i<json.posList.length; i++){
+				if(json.posList[i].checked ==1)
+				$('#pos_id').append('<option value="' + json.posList[i].pos_id + '">' + json.posList[i].pos_name + '</option>');
 			}
 		}
 	});
-}
-
-//加载药品类型为一棵树
-var setting = {
-			check: {
-				enable: false
-			},
-			view: {
-				dblClickExpand: false,
-				selectedMulti: false
-			},
-			data: {
-					key: {
-						title: 'remark',
-						name: 'org_name'
-					},
-					simpleData: {
-						enable: true,
-						idKey: 'org_id',
-						pIdKey: 'parent_id'				
-					}
-				},
-			callback: {                 
-				beforeDrag: false,
-				onClick: onClick
-			}
-		};
-//单机选择时选择id和name 然后隐藏药品类型树
-function onClick(e, treeId, treeNode) {
-		if(treeNode.org_id == ids || treeNode.org_type != types){
-			alert("对不起,请重新选择!");
-			return;
-		}
-		//回填
-		$("#"+class_name).val(treeNode.org_name);
-		$("#"+class_id).val(treeNode.org_id);
-		hideMenu();
-		var dept_id = '';
-		dept_id = $("#dept_id").val();
-		if(dept_id != ''){
-			choosePost();
-		}
-}
-//隐藏树
-function hideMenu() {
-		$("#"+menuContent).hide();
-}   
-//放下鼠标时隐藏树
-function clickBodyDown(event) {
-		if (!($(event.target).parents("#"+menuContent).length>0)) {
-			hideMenu();
-		}
-}
-
-//加载区域信息
-function chooseArea(area_id,area_name){
-	 url='<%=basePath%>admin/basic/system/area/area_choose.jsp';
-	 var obj= openModalWindow(url,"选择区域",'custom',300,450);
-	 if(obj){
-		 var data=obj.split(',');
-		 $('#'+area_id).val(parseInt(data[0]));
-		 $('#'+area_name).val(data[1]);
-	 }
 }
 
 </script>
@@ -263,7 +137,7 @@ function chooseArea(area_id,area_name){
 						<th><font>*</font>用户类型</th>
 						<td>
 							<select name="user.user_type" id="user_type" class="downMenu">
-								<option value="">----请选择----</option>
+								<option value="">--请选择--</option>
 								<option value="1">用户类型1</option>
 								<option value="2">用户类型2</option>
 								<option value="3">用户类型3</option>
@@ -275,13 +149,9 @@ function chooseArea(area_id,area_name){
 						</td>
 					</tr>
 					<tr>
-						<th><font>*</font>所在组织</th>
-						<td>
-							<div id="menuContentOne" class="menuContent" style="display:none; position: absolute;" >
-								<ul id="drugTypeOne" class="ztree" style="margin-top:0; width:140px; height: 300px;"></ul>
-							 </div>
-							<input type="text" class="chooseInput" title="点击选择信息" onclick="chooseOrgan('drugTypeOne','org_id','org_name','menuContentOne',1,0);" readonly="readonly" name="user.org_name" id="org_name" style="width:153px;" readonly="readonly"/>
-							<input type="hidden" name="user.org_id" id="org_id" />
+						<th><font>*</font>用户编号</th>
+						<td >
+							<input type="text" name="user.user_code" id="user_code" style="width: 151px;"/>
 						</td>
 						<th><font>*</font>用户姓名</th>
 						<td>
@@ -289,21 +159,27 @@ function chooseArea(area_id,area_name){
 						</td>
 					</tr>
 					<tr>
-						<th><font>*</font>所在部门</th>
+						<th><font>*</font>所在组织</th>
 						<td>
-							<div id="menuContentTwo" class="menuContent" style="display:none; position: absolute;" >
-								<ul id="drugTypeTwo" class="ztree" style="margin-top:0; width:140px; height: 300px;"></ul>
-							 </div>
-							<input type="text" class="chooseInput" title="点击选择信息" onclick="chooseOrgan2('drugTypeTwo','dept_id','dept_name','menuContentTwo',2);" readonly="readonly" name="user.dept_name" id="dept_name" style="width:153px;" readonly="readonly"/>
-							<input type="hidden" name="user.dept_id" id="dept_id" />
+							<input type="text"  name="user.org_name" title="点击选择信息" id="org_name"/>
+							<input type="hidden" name="user.org_id"  id="org_id" class="notNull"/>
 						</td>
 						<th><font>*</font>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</th>
 						<td>
-							<select name="user.gender" id="gender" class="downMenu">
-								<option value="">----请选择----</option>
-								<option value="2">男</option>
-								<option value="1">女</option>
-							</select>
+							<label><input type="radio" name="user.gender" value="2" checked="checked" />男</label>
+							<label><input type="radio" name="user.gender" value="1" />女</label>
+						</td>
+					</tr>
+					<tr>
+						<th>所在区域</th>
+						<td>
+							<input type="text" name="user.area_name" id="area_name" class="unenterTextbox" readonly="readonly"  style="width: 152px;"/>
+							<input type="hidden" name="user.area_id" id="area_id" maxlength="100"/>
+						</td>
+						<th><font>*</font>可再授权</th>
+						<td>
+							<label><input type="radio" name="user.auth_again" value="2" checked="checked" />可以</label>
+							<label><input type="radio" name="user.auth_again" value="1" />不可以</label>
 						</td>
 					</tr>
 					<tr>
@@ -313,16 +189,15 @@ function chooseArea(area_id,area_name){
 								<option value="">--请选择--</option>
 							</select>
 						</td>
-						<th><font>*</font>用户手机号</th>
+						<th><font>*</font>手&nbsp;&nbsp;机&nbsp;&nbsp;号</th>
 						<td><input type="text" name="user.cellphone_no" id="cellphone_no" maxlength="20"/></td>
 					</tr>
 					<tr>
-						<th><font>*</font>所在区域</th>
-						<td>
-							<input type="text" name="user.area_name" id="area_name" class="chooseInput" style="width:153px;" title="点击选择信息" onclick="chooseArea('area_id','area_name');" readonly="readonly" />
-							<input type="hidden" id="area_id" name="user.area_id" />
+						<th>直接上级</th>
+						<td><input type="text" name="user.superior_name" id="auto_user_name" style="width: 153px;"/>
+							<input type="hidden" name="user.superior_id" id="auto_user_id" />
 						</td>
-						<th><font>*</font>电子邮箱</th>
+						<th>电子邮箱</th>
 						<td><input type="text" name="user.email" id="email" maxlength="100"/></td>
 					</tr>
 					<tr>
@@ -337,10 +212,7 @@ function chooseArea(area_id,area_name){
 		</div>
 		<div class="btns">
 			<span class="btn"><input type="submit" id="submitBtn" value="提交" /></span>
-			<span class="btn">
-				<input type="button" id="cancelBtn" value="返回" 
-					onclick="javascript:window.location.href='<%=basePath%>basic/sys/user_query.action'"/>
-			</span>
+			<span class="btn"><input type="button" id="cancelBtn" value="返回" onclick="javascript:window.history.back()"/></span>
 		</div>
 	</form>
 </body>

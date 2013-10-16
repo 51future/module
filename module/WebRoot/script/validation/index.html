@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>LiveValidation  - Examples</title>
   <link rel="stylesheet" type="text/css" href="css/consolidated_common.css" />
   <script type="text/javascript" src="../jquery-1.4.4.min.js"></script>
@@ -13,20 +13,20 @@
   
   
 		var field1 = new LiveValidation( 'field1', {wait: 500 } );
-		field1.add( Validate.Email, {failureMessage: "ÇëÊäÈëÕıÈ·µÄEmailµØÖ·"});
-		field1.add( Validate.Presence, {failureMessage: "²»ÄÜÎª¿ÕÅ¶!"});
+		field1.add( Validate.Email, {failureMessage: "è¯·è¾“å…¥æ­£ç¡®çš„Emailåœ°å€"});
+		field1.add( Validate.Presence, {failureMessage: "ä¸èƒ½ä¸ºç©ºå“¦!"});
 		
 		var field2 = new LiveValidation( 'field2', {onlyOnSubmit: true } );
-		field2.add( Validate.Acceptance, {failureMessage: "±ØĞëÑ¡ÖĞ£¡"});
+		field2.add( Validate.Acceptance, {failureMessage: "å¿…é¡»é€‰ä¸­ï¼"});
 		
 		var field3 = new LiveValidation( 'field3', {onlyOnSubmit: true } );
-		field3.add( Validate.Presence, {failureMessage: "²»ÄÜÎª¿ÕÅ¶!"});
+		field3.add( Validate.Presence, {failureMessage: "ä¸èƒ½ä¸ºç©ºå“¦!"});
   });
   </script>
 </head>
 <body>
 <div id="doc">
-	ÑéÖ¤Õû¸ö±íµ¥µÄÌá½»£º
+	éªŒè¯æ•´ä¸ªè¡¨å•çš„æäº¤ï¼š
 	<form action="#" method="post">
 		<fieldset>
 			<p><label for="field1" class="displayBlock">Email (optional):</label><input type="text" id="field1" /></p>

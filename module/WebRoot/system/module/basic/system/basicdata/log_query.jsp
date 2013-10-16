@@ -8,7 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
 <script language="javascript">
 $(function(){

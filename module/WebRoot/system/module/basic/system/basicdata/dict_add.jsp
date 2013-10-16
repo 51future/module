@@ -11,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/validation/css/livevalidation.css"/>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
 <script language="javascript">
@@ -25,7 +25,7 @@ function checkAll(){
 	var di_key = new LiveValidation('di_key',{onlyOnSubmit:true});
 	di_key.add( Validate.Presence, {failureMessage: "不能为空!"});
 	di_key.add( Validate.Length, { maximum: 50} );
-	di_key.add( Validate.Custom, { failureMessage: '该值已经存在！', against: function(value, args){
+	di_key.add( Validate.Custom, { failureMessage: '该值已经存在!', against: function(value, args){
 		var valid = 'true';
 		var params = {
 			'sysDictItem.di_key': $('#di_key').val(),
@@ -40,6 +40,7 @@ function checkAll(){
 		});
 		return (valid == 'true');
 	}});
+	di_key.add( Validate.Format, { failureMessage: "只能由字母/数字/下划线组成!", pattern: /^\w+$/});
 	
 	var di_value = new LiveValidation('di_value',{onlyOnSubmit:true});
 	di_value.add( Validate.Presence, {failureMessage: "不能为空!"});
@@ -71,14 +72,15 @@ function checkAll(){
 						</td>
 					</tr>
 					<tr>
-						<th><font>*</font>是否有效</th>
+						<th><font>*</font>启用状态</th>
 						<td>
 							<select name="sysDictItem.enable" id="enable" style="width:155px;">
-								<option value="1">否</option>
-								<option value="2" selected="selected">是</option>
+								<option value="1">禁用</option>
+								<option value="2" selected="selected">启用</option>
 							</select>
 						</td>
 					</tr>
+					<!-- 
 					<tr>
 						<th><font>*</font>参数类别</th>
 						<td><select name="sysDictItem.issys" id="issys" style="width:155px;">
@@ -86,6 +88,7 @@ function checkAll(){
 								<option value="1" selected="selected">用户定义</option>
 							</select></td>
 					</tr>
+					 -->
 					<tr>
 						<th>内容描述</th>
 						<td>

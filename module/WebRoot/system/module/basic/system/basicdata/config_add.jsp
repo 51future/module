@@ -9,11 +9,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
+<jsp:include page="/admin/common/load_module_combox_tree.jsp"></jsp:include>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/validation/css/livevalidation.css"/>
 <script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/public.js"></script>
 <script language="javascript">
+//添加系统模块属性
+$(function(){
+	var moduleTreeBox = new ModuleComboxTree({
+		idFieldId: 'module_id',
+		nameFieldId: 'module_name'
+	});
+});
+
 $(function(){
 	checkAll();
 });
@@ -89,6 +97,14 @@ function goback(){
 						</select>
 					</td>
 				</tr>
+				<tr>
+			  		<td align="right">所属业务模块</td>
+			  		<td>
+						<div class="box">
+							<input type="text" name="sysConfig.module_name" id="module_name" />
+							<input type="hidden" name="sysConfig.module_id" id="module_id" />
+						</div>
+				  	</td>
 				<tr>
 					<th>备注说明</th>
 					<td>

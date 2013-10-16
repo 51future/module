@@ -1,5 +1,4 @@
 <%@page import="java.util.Date"%>
-<%@page import="org.activiti.engine.impl.interceptor.Session"%>
 <%@ page language="java" pageEncoding="utf-8"%>
 <%
 	String path = request.getContextPath();
@@ -16,17 +15,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>上传文件</title>
-<base target="_self" href="<%=basePath%>" />
-<link  type="text/css" rel="stylesheet" href="js/lib/jquery/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" media="screen" />
-<script type="text/javascript" src="js/lib/jquery/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="js/lib/jquery/plupload/js/plupload.full.js"></script>
-<script type="text/javascript" src="js/lib/jquery/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-<script type="text/javascript" src="js/lib/jquery/plupload/js/i18n/cn.js"></script>
+<base target="_self"/>
+<link  type="text/css" href="<%=basePath%>js/lib/jquery/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" rel="stylesheet" media="screen" />
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/plupload/js/plupload_browserplus-min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/plupload/js/plupload.full.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/plupload/js/i18n/cn.js"></script>
 <script type="text/javascript">
-	var upFileAllowCount = 1; //默认只能添加一个附件
+	var upFileAllowCount = 0; //默认不限制附件个数
 	if(!isNaN('<%=upFileAllowCount%>')){
 		upFileAllowCount = new Number('<%=upFileAllowCount%>');
 	}
+	
 	var upFileSuffixT = '所有文件(*.*)'; //默认不限制文件类型
 	var upFileSuffixs = '*'; //默认不限制文件类型
 	if('<%=upFileSuffixs%>' != 'null' && '<%=upFileSuffixs%>'.length > 0) {
@@ -37,17 +38,16 @@
 	}
 	$(function() {
 		$("#uploader").pluploadQueue({
-			runtimes : 'gears,flash,silverlight,browserplus,html5,html4',
+			//runtimes : 'gears,flash,silverlight,browserplus,html5,html4',
+			runtimes : 'silverlight,flash,gears,browserplus,html5,html4',
 			url : '<%=basePath%>basic/sys/filePlupload.action',
+			chunk_size: '1mb',
 			max_file_size : '1024mb',
 			unique_names : true,
-			dragdrop : true,
 			multiple_queues : true,
-			chunk_size: '1mb',
-			//resize: { width: 320, height: 240, quality: 100},
 			filters : [{title : upFileSuffixT, extensions : upFileSuffixs}],
 			flash_swf_url : '<%=basePath%>js/lib/jquery/plupload/js/plupload.flash.swf',
-			silverlight_xap_url : '<%=basePath%>/plupload/js/plupload.silverlight.xap',
+			silverlight_xap_url : '<%=basePath%>js/lib/jquery/plupload/js/plupload.silverlight.xap',
 			multipart_params : { 'att_type' : '<%=att_type%>','fileInfos' : null},
 			init : {
 				FileUploaded: function(up, file, info) {
@@ -56,8 +56,15 @@
 						window.returnValue = json.fileInfos; 
 						up.settings.multipart_params = {'att_type' : '<%=att_type%>'};
 					}else{
-						alert('文件'+file.name+'上传失败，请联系管理员!');
+						alert('文件'+file.name+'上传失败，请联系管理员！');
 					}
+	            },
+	            FilesAdded: function(up, files) {
+	            	for(var i=0; i<files.length; i++){
+						if(upFileAllowCount >0 && up.files.length >upFileAllowCount || files[i].size <=0){
+	            			up.removeFile(files[i]);
+						}
+	            	}
 	            }
 			}
 		});

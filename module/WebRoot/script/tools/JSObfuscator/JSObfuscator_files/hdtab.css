@@ -1,0 +1,106 @@
+﻿
+body,table, div,td, th{font-size: 12px;font-family: "宋体,Verdana,Arial";}
+.tabControl{
+    position:relative;
+    background-color:threedface;
+    overflow:hidden;
+    padding:1px; 
+}
+.tabControl .td_tab{
+    padding-left: 3px;
+}
+.tabControl .span_tab{
+    height: 20px;
+    padding-top:3px;
+    background-color: threedface;
+}
+.tabControl .td_tab span{
+    float:left;
+}
+.tabControl .span_tabText {
+    border-right:1px solid threedshadow;
+    border-top:1px solid threedhighlight;
+    height:16px !important;
+    height:20px;
+    padding-left:5px;
+    padding-right:15px;
+    padding-top:3px;
+    cursor:default;
+}
+.tabControl .span_leftVLine
+{
+    width: 1px;
+    border-left: threedhighlight 1px solid;
+    height: 19px;
+    margin-top:1px;
+}
+.tabControl .span_RightVLine
+{
+    width: 1px;
+    border-left: threedshadow 1px solid;
+    height: 19px;
+    margin-top:1px;
+}
+.tabControl .span_selectedTab
+{
+    position: absolute;
+    left: 1px;
+    top: 2px;
+    height: 23px;
+    z-index: 99999;
+    background-color: threedface;
+}
+.tabControl .span_selectedTabText
+{
+    border-top: threedhighlight 1px solid;
+    border-right: threedshadow 1px solid;
+    height:20px !important;
+    height:23px;
+    padding-top: 2px;
+    padding-left: 6px;
+    padding-right: 18px;
+    cursor:default;
+}
+.tabControl .span_selectedleftVLine
+{
+    width: 1px;
+    border-left: threedhighlight 1px solid;
+    height: 22px;
+    margin-top:1px;
+}
+.tabControl .span_selectedRightVLine
+{
+    width: 1px;
+    border-left: threedshadow 1px solid;
+    height: 22px;
+    margin-top:1px;
+}
+.tabControl .td_tabContent
+{
+	border-color:threedhighlight threedshadow threedshadow threedhighlight;
+	border-style:solid;
+	border-width:1px;
+}
+.tabControl .div_tabContent
+{
+	margin:5px 10px;
+}
+
+.tabControl .btn
+{
+	width:70px;
+	height:auto !important;
+	height:20px;
+}
+
+#ConfusionOptions table
+{
+	border-collapse:collapse;
+}
+#ConfusionOptions td
+{
+	padding:3px 0px;
+}
+.check_size{ background-color:Silver;padding:10px 5px;}
+.check_size_tip{}
+.check_size_ads{}

@@ -83,14 +83,12 @@ function isExistFile(){//是否有附件（包括原有附件），用于更新�
 function onFileChange(){//选择打开一个附件时触发
 	var fn = event.srcElement.value;//fn所选的附件的名字
 	if(!isRightFileSuffix(fn)){
-		//jQuery('#upfileBox' + upFileCount).remove();
 		delAttachment(upFileCount);
 		upFileCount--;
 		addAttachment();
 		return;
 	}
 	if(!isRightFileSuffixs(fn)){
-		//jQuery('#upfileBox' + upFileCount).remove();
 		delAttachment(upFileCount);
 		upFileCount--;
 		addAttachment();
@@ -98,7 +96,6 @@ function onFileChange(){//选择打开一个附件时触发
 	}
 	if(isInvalidFile(fn)){
 		//已选择了的附件不与添加
-		//jQuery('#upfileBox' + upFileCount).remove();
 		delAttachment(upFileCount);
 		upFileCount--;
 		addAttachment();
@@ -116,11 +113,13 @@ function addAttachment() {
 		return;
 	}
 	if(upFileAllowCount != 0&&(updateTotal()>=upFileAllowCount)){
+		$('#btnAdd').css('disabled','disabled');
 		return;
+	}else{
+		$('#btnAdd').css('disabled','');
 	}
 	upFileCount++;
 	upFileMap['_upfile' + upFileCount] = null;
-	
 	var upFileBoxStr = '<div id="upfileBox' + upFileCount + '">';
 	upFileBoxStr += '&nbsp;<input name="upload" type="file" onchange="onFileChange();" id="_upfile'+upFileCount+'" size="45"/>';
 	upFileBoxStr += '<a href="javascript:delAttachment('+ upFileCount +')" class="fon_italic" >删除</a>';
@@ -157,13 +156,21 @@ function isInvalidFile(fn){
 function updateTotal(){
 	var size = 0;
 	for(var k in upFileMap){
-		k;
-		size++;
+		size++;k;
 	}
 	if(size==0)defaultButton();
 	jQuery('#total').empty();
 	upFileNum = size;
-	jQuery('#total').append('当前选择上传' + size + '个附件');
+	if(upFileAllowCount <=0){
+		jQuery('#total').append('当前选择上传' + size + '个附件');
+	}else{
+		jQuery('#total').append('当前选择上传' + size + '个附件，还可以选择<font color="red">'+(upFileAllowCount-size)+'</font>个附件');
+		if(upFileAllowCount >= size){
+			$('#btnAdd').css('disabled','disabled');
+		}else{
+			$('#btnAdd').css('disabled','');
+		}
+	}
 	return size;
 }
 
@@ -177,13 +184,9 @@ function delAttachment(id){
 function clearAttachment() { 
 	jQuery('#uploads').empty();
 	upFileMap = {};
+	upFileCount = 0;
 	defaultButton();
 	updateTotal();
-} 
-
-function getAttachmentInfo() { 
-	alert("getAttachmentInfo");
-	//通过ActiveX获取本地文件大小
 } 
 
 //默认按钮

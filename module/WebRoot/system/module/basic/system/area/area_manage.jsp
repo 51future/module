@@ -6,14 +6,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/jquery/zTree/css/demo.css"/>
 <link rel="stylesheet" href="<%=basePath%>js/lib/jquery/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
 <jsp:include page="/admin/common/css/style_sub.jsp"></jsp:include>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>js/lib/validation/css/livevalidation.css"/>
 <script type="text/javascript" src="<%=basePath%>js/lib/validation/livevalidation.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>js/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/lib/jquery/zTree/js/jquery.ztree.core-3.3.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/lib/jquery/zTree/js/jquery.ztree.excheck-3.3.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/lib/jquery/zTree/js/jquery.ztree.exedit-3.3.js"></script>
@@ -68,7 +68,7 @@ $(function(){
 });
 
 function dblClickExpand(treeId, treeNode) {
-	return treeNode.o_level > 0;
+	return treeNode.level_no > 0;
 }
 
 //单击事件
@@ -76,11 +76,15 @@ function onClick(event, treeId, treeNode,clickFlag) {
 	if(treeNode.area_id== 0){
 		$('#modeMsg').empty();//清空操作模式
 		$('#saveBtn').attr('disabled', 'disabled');//改变保存按钮的状态
+		$('#saveBtn').css('display', 'none');//改变保存按钮隐藏
+		$('#deleteBtn').attr('disabled', 'disabled');//改变删除按钮的状态
+		$('#deleteBtn').css('display', 'none');//改变删除按钮隐藏
 	}else{
 		changeMode('update');//改变操作模式
 	}
 	//给文本框赋值
 	$("input[name='area.area_name']").val(treeNode.area_name);
+	$("input[name='area.area_code']").val(treeNode.area_code);
 	$("input[name='area.area_id']").val(treeNode.area_id);
 	$("input[name='area.remark']").val(treeNode.remark);
 	$("input[name='area.order_no']").val(treeNode.order_no);
@@ -91,6 +95,7 @@ function onClick(event, treeId, treeNode,clickFlag) {
 	$("input[name='area.parent_id']").val(pn!=null ? pn.area_id : '');
 	$("input[name='area.parent_name']").val(pn!=null ? pn.area_name : '');
 	$("input[name='area.parent_level_no']").val(pn!=null ? pn.level_no : '');
+	$("#parent_area_code").val(pn!=null ? pn.area_code : '');
 }
 
 //在树形图中指针指定的节点后面加按钮
@@ -101,14 +106,18 @@ function addHoverDom(treeId,treeNode){
 	sObj.after(addStr);
 	var btn=$("#addBtn_"+treeNode.id);
 	if(btn) btn.bind("click",function(event){
+		$.fn.zTree.getZTreeObj("treeDemo").selectNode(treeNode);
 		changeMode('insert');//将模式改成添加
 			//给文本框赋值
 		$("input[name='area.parent_name']").val(treeNode.area_name);
 		$("input[name='area.parent_id']").val(treeNode.area_id);
 		$("input[name='area.parent_level_no']").val(treeNode.level_no);
-		$("input[name='area.parent_node_path']").val(treeNode.parent_node_path);
+		$("input[name='area.parent_node_path']").val(treeNode.node_path);
+		$("#parent_area_code").val(treeNode.area_code);
+		
 		//赋空值
 		$("input[name='area.area_name']").val('');
+		$("input[name='area.area_code']").val(treeNode.area_code);
 		$("input[name='area.area_id']").val('');
 		$("input[name='area.remark']").val('');
 		$("input[name='area.order_no']").val('');
@@ -127,68 +136,130 @@ function addHoverDom(treeId,treeNode){
 	if(mode == 'insert'){
 		action = '<%=basePath %>basic/sys/area_insert.action'; 
 		modeMsg='创建模式';
+		$('#area_code').attr('readonly',false);
+		$('#area_code').attr('class','');
+	}else{
+		$('#area_code').attr('readonly','readonly');
+		$('#area_code').attr('class','unenterTextbox');
 	}
 	var childrens = $.fn.zTree.getZTreeObj("treeDemo").getSelectedNodes(true)[0].children;
- 	if(childrens == undefined){
+ 	if(childrens == undefined && mode != 'insert'){
  		$('#deleteBtn').attr('disabled',false); 
+ 		$('#deleteBtn').css('display','block'); //显示
  	}else{
  		$('#deleteBtn').attr('disabled','disabled'); 
+ 		$('#deleteBtn').css('display','none');//隐藏 
  	}
  	
  	$('#checkType').val(mode);
  	$('#saveBtn').attr('disabled',false);
+ 	$('#saveBtn').css('display','block');
  	$('#form').attr('action',action);
  	$('#modeMsg').empty().append(modeMsg);
  }
 
 function checkAll(){
-	//名称验证
+	//区域名称验证
 	var area_name = new LiveValidation('area_name',{onlyOnSubmit:true});
 	area_name.add(Validate.Presence,{failureMessage:"不能为空!"});
 	area_name.add(Validate.Length,{maximum:30});
 	area_name.add(Validate.Custom,{failureMessage:'区域名称已经存在!',against:function(value,args){
-	
 		var valid='true';
 		var checkType = $("#checkType").val();
 		var params = {
 				'area.area_name':$('#area_name').val(),
 				'area.parent_id':$('#parent_id').val(),
-				'checkType':checkType
+				'checkType':checkType,
+				'ct': (new Date()).getTime()
 		};
 		if(checkType=='update') params['area.area_id'] = $('#area_id').val();
 		$.ajaxSetup({async:false});
-		$.post('<%=basePath%>basic/sys/area_checkArea.action',params,function(json){valid=json.valid});
+		$.post('<%=basePath%>basic/sys/area_checkArea.action',params,function(json){valid=json.valid;});
 		return (valid == 'true');
 	}});
+	
+	//区域编号验证
+	var area_code = new LiveValidation('area_code',{onlyOnSubmit:true});
+	area_code.add(Validate.Presence,{failureMessage:"不能为空!"});
+	area_code.add(Validate.Length,{maximum:100});
+	area_code.add(Validate.CodeNum,{});
+	area_code.add(Validate.Custom,{failureMessage:'必须以上级区域编号开头!',against:function(value,args){
+		var valid='true';
+		var parent_id = $('#parent_id').val();
+		if(parent_id > 0){
+			var parent_area_code = $('#parent_area_code').val();
+			if(value.length >= parent_area_code.length){
+				for(var i=0 ; i<parent_area_code.length; i++){
+					if(parent_area_code.charAt(i) != value.charAt(i)){
+						valid = 'false'; break;
+					}
+				}
+			}else{
+				valid = 'false';
+			}
+		}
+		return (valid == 'true');
+	}});
+	area_code.add(Validate.Custom,{failureMessage:'区域编号已经存在!',against:function(value,args){
+		var valid='true';
+		var checkType = $("#checkType").val();
+		var params = {
+			'area.area_code':$('#area_code').val(),
+			'checkType':checkType,
+			'ct': (new Date()).getTime()
+		};
+		if(checkType=='update') params['area.area_id'] = $('#area_id').val();
+		$.ajaxSetup({async:false});
+		$.post('<%=basePath%>basic/sys/area_checkArea.action',params,function(json){valid=json.valid;});
+		return (valid == 'true');
+	}});
+	
+	//顺序号验证
 	var order_code = new LiveValidation('order_no',{onlyOnSubmit:true});
 	order_code.add(Validate.Presence,{failureMessage:"不能为空！"});
 	order_code.add(Validate.Numericality,{notANumberMessage:"须输入数字!"});
 	
+	//顺序号
+	var order_no = new LiveValidation('order_no',{onlyOnSubmit:true});
+	order_no.add(Validate.Presence,{failureMessage:"不能为空！"});
+	order_no.add(Validate.Length,{maximum:32});
+	
+	//备注说明
+	var remark = new LiveValidation('remark',{onlyOnSubmit:true});
+	remark.add(Validate.Length,{maximum:150});
 }
 
 //删除
 function deleteArea(){
 	var treeObj= $.fn.zTree.getZTreeObj("treeDemo");
 	var node = treeObj.getSelectedNodes(true)[0];
-	var childrens = node.children;
 	var idStr = node.area_id;
-	alert("删除id为"+idStr);
-	$.post("<%=basePath %>basic/sys/area_delete.action",{'area.area_id':idStr},function (json){
-		if(json.resultCode){
-			alert("操作成功");
-			window.location.href=window.location.href;//刷新
-		}else{
-			alert("操作失败");
-		}
-	});
+	if(!confirm("确定要删除区域【"+node.area_name+"】吗？")) return false;
+	
+	var valid = 'true';
+	$.ajaxSetup({async:false});
+	$.post('<%=basePath%>basic/sys/area_checkAreaDel.action',{'area.area_id':idStr},function(json){valid = json.valid;});
+	if((valid == 'true')){
+		$.post("<%=basePath %>basic/sys/area_delete.action",{'area.area_id':idStr},function (json){
+			if(json.resultCode == 'success'){
+				alert("操作成功");
+				window.location.href=window.location.href;//刷新
+			}else{
+				alert("操作失败");
+			}
+		});
+	}else{
+		alert("区域【"+node.area_name+"】存在关联不能删除！");
+	}
 }
+
 </script>
 <style type="text/css">
 .ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.switch.level0 {visibility:hidden; width:1px;}
 .ztree li ul.level0 {padding:0; background:none;}
 </style>
-  </head>
+</head>
   
 <body>
 	<div class="content_wrap">
@@ -214,12 +285,13 @@ function deleteArea(){
 									<input type="hidden" name="area.parent_id" id="parent_id"/>
 									<input type="hidden" name="area.parent_level_no"/>
 									<input type="hidden" name="area.parent_node_path"/>
+									<input type="hidden" id="parent_area_code"/>
 								</td>
 							</tr>
 							<tr>
 								<th><font>*</font>区域编号</th>
 								<td>
-									<input type="text" name="area.area_code" id="area_code"/>
+									<input type="text" name="area.area_code" id="area_code" />
 								</td>
 							</tr>
 							<tr>
@@ -233,8 +305,8 @@ function deleteArea(){
 								<th><font>*</font>区域状态</th>
 								<td>
 									<select name="area.enable" class="downMenu">
-										<option value="1">禁用</option>
 										<option value="2">启用</option>
+										<option value="1">禁用</option>
 									</select>
 								</td>
 							</tr>
@@ -246,12 +318,12 @@ function deleteArea(){
 							</tr>
 							<tr>
 								<th>备注说明</th>
-								<td><input type="text" name="area.remark" maxlength="100"/></td>
+								<td><input type="text" name="area.remark" id="remark" maxlength="100"/></td>
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
-									<span class="btn"><input type="submit" value="保存" id="saveBtn" disabled="disabled"/></span>
-									<span class="btn"><input type="button" value="删除" id="deleteBtn" disabled="disabled" onclick="javascript:deleteArea();"/></span>
+									<span class="btn"><input type="submit" value="保存" id="saveBtn" style="display: none" disabled="disabled"/></span>
+									<span class="btn"><input type="button" value="删除" id="deleteBtn" style="display: none" disabled="disabled" onclick="javascript:deleteArea();"/></span>
 								</td>
 							</tr>
 					</table>

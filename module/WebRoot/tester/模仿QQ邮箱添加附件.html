@@ -1,0 +1,139 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><title>仿QQ邮箱附件</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type/>     
+<script>
+//仿QQ邮箱附件,这个只能看不能用。原因忘记了，反正跟IE有关。
+
+
+/**//*    
+需要注意的几个地方：    
+.由于input type=file控件不能对type属性赋值(in IE),所以采用插入HTML代码的方式(insertAdjacentHTML)；    
+.input type=file控件的value是只读的，不能被赋值；    
+.因为用一个input type=file控件有缺陷，就是当用户删除了最后一次添加的文件再添加同样的文件则无法触发onchange事件；    
+并且要上传文件，只用一个上传控件是不够的；    
+.客户端无法获取文件大小，除非用FSO或ActiveX等。除了img控件，其fileSize可以在图片文件加载完成后获取其文件大小；    
+.还有另外一种变通的方法就是用flash与js交互达到获取客户端文件大小的效果(现在flash在安全方面也做了限制)；    
+*/     
+var i = 0;    // 用来动态生成span,upfile的id      
+function addAttachmentToList()      
+{      
+    if (findAttachment(event.srcElement.value)) return;    //如果此文档已在附件列表中则不再添加      
+          
+    // 动态创建附件信息栏并添加到附件列表中      
+    var span = document.createElement('span');      
+    span.id = '_attachment' + i;      
+    span.innerHTML = extractFileName(event.srcElement.value) + '&nbsp;<a href="javascript:delAttachment(' + (i++) + ')"><font color="blue">删除</font></a><br/>';      
+    span.title = event.srcElement.value;      
+    G('attachmentList').appendChild(span);      
+          
+    // 显示附件列表并变换添加附件按钮文本      
+    if (G('attachmentList').style.display == 'none')      
+    {      
+        G('btnAdd').value = '继续添加';      
+        G('attachmentList').style.display = '';      
+        G('btnClear').style.display = '';      
+    }      
+     
+    G('total').innerText = '当前选择上传'+ G('attachmentList').childNodes.length + '个附件';      
+}      
+     
+function selectAttachment()      
+{      
+    // 先清除无效动态生成的多余upfile      
+    cleanInvalidUpfile();      
+          
+    // 动态创建上传控件并与span对应      
+    var upfile = '<input type="file" style="display:none" onchange="addAttachmentToList();" id="_upfile'+i+'">';      
+    document.body.insertAdjacentHTML('beforeEnd', upfile);      
+    G('_upfile'+i).click();      
+}      
+     
+function extractFileName(fn)      
+{      
+    return fn.substr(fn.lastIndexOf('\\')+1);      
+}      
+     
+function findAttachment(fn)      
+{      
+    var o = G('attachmentList').getElementsByTagName('span');      
+    for(var i=0;i<o.length;i++)      
+        if (o[i].title == fn) return true;      
+    return false;      
+}      
+     
+function delAttachment(id)      
+{      
+    G('attachmentList').removeChild(G('_attachment'+id));      
+    document.body.removeChild(G('_upfile'+id));      
+          
+    // 当附件列表为空则不显示并且变化添加附件按钮文本      
+    if (G('attachmentList').childNodes.length == 0)      
+    {      
+        G('btnAdd').value = '添加附件';      
+        G('attachmentList').style.display = 'none';      
+        G('btnClear').style.display = 'none';      
+    }      
+          
+    G('total').innerText = '当前选择上传'+ G('attachmentList').childNodes.length + '个附件';          
+}      
+     
+function cleanInvalidUpfile()      
+{      
+    var o = document.body.getElementsByTagName('input');      
+    for(var i=o.length-1;i>=0;i--)      
+      if (o[i].type == 'file' && o[i].id.indexOf('_upfile') == 0)      
+      {      
+          if (!G('_attachment'+o[i].id.substr(7)))      
+              document.body.removeChild(o[i]);      
+      }      
+}      
+     
+function clearAttachment()      
+{      
+    var o = G('attachmentList').childNodes;      
+    for(var i=o.length-1;i>=0;i--)      
+        G('attachmentList').removeChild(o[i]);      
+     
+    o = document.body.getElementsByTagName('input');      
+    for(var i=o.length-1;i>=0;i--)      
+      if (o[i].type == 'file' && o[i].id.indexOf('_upfile') == 0)      
+      {      
+          document.body.removeChild(o[i]);      
+      }          
+     
+    G('btnAdd').value = '添加附件';      
+    G('attachmentList').style.display = 'none';      
+    G('btnClear').style.display = 'none';      
+          
+    G('total').innerText = '当前选择上传0个附件';          
+            
+}      
+     
+function getAttachmentInfo()      
+{      
+    // 已知的js获取本地文件大小的三种方式      
+    // 1.通过FSO 2.通过ActiveX 3.通过Flash(设置可能更麻烦)与js交互      
+    // 注：QQ邮箱中获取本地文件大小就是采用第二种方式      
+}      
+     
+function G(id)      
+{      
+    return document.getElementById(id);      
+}      
+     
+</script>      
+</HEAD>      
+<BODY>      
+	<fieldset style="border : 1px solid #84A24A;text-align:left;color:#84A24A;font-size: 12px;font-family: Verdana;padding:5px;">      
+		<legend>模仿QQ邮箱添加附件</legend>      
+		<input type="button" value="添加附件" id="btnAdd" onclick="selectAttachment();" style="background:transparent;border:1px solid #84A24A; color:#84A24A" ></input>&nbsp;
+		<input type="button" value="清空附件" id="btnClear" onclick="clearAttachment();" style="background:transparent;border:1px solid #84A24A; color:#84A24A;display:none;"></input>      
+		
+		<div id="attachmentList" style="background-color:#DEEBC6;border:1px solid #84A24A; margin:3px 0px 0px 0px;padding:4px 3px 4px 3px;display:none;"></div>      
+		<div id="total" style="margin:3px 0px 0px 0px;">当前选择上传0个附件</div>      
+	</fieldset>     
+</BODY>      
+</HTML>  

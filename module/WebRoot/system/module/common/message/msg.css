@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body { height:100%; padding:0; margin:0; }
+/*---------消息通知start-----------*/
+#panel { width:438px; position: absolute; left: 50%; bottom: 0px; margin-left:-219px; height: 0px; overflow: hidden; display: none; z-index: 10; }
+#panel h1{font-size:14px; color:#2D2D2D; background:url(imgs/boxBg_01.png) no-repeat; height:36px; line-height:36px; font-weight:bold; padding:4px 15px 0 15px;}
+#panel h1 img{vertical-align:middle; margin-left:8px;}
+#panel h1 a{ float: right; background:url(imgs/close.png) no-repeat; width:14px; height:15px; margin-top:10px; display:block; text-indent:-9999px;  }
+#panel h1 a:hover{background:url(imgs/close.png) no-repeat -27px 0;}
+#panel .panelContent{background:url(imgs/boxBg_02.png) repeat-y;height:100%;}
+#panel .panelContent ul{ padding:8px 14px;}
+#panel .panelContent li{ float:left; width:94px; margin:3px;}
+/*---------消息通知end------------*/

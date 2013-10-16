@@ -63,10 +63,10 @@
 				<tbody>
 				<s:iterator value="%{pm.list}">
 					<tr>
-						<td>${di_key}</td>
-						<td>${di_value}</td>
-						<td title="${remark}">${fn:substring(remark,0,10)}</td>
-						<td>${dt_code}</td>
+						<td style="text-align: left;">${di_key}</td>
+						<td style="text-align: left;">${di_value}</td>
+						<td title="${remark}" style="text-align: left;">${fn:substring(remark,0,10)}</td>
+						<td style="text-align: left;">${dt_code}</td>
 						<td>
 							<s:if test="%{enable==2}">
 								<img src="<%=basePath%>style/icons/ok.png" title="启用" alt="启用"/>
@@ -84,18 +84,33 @@
 							</s:elseif>
 						</td>
 						<td>
-							<a href="javascript:void(0);" class="modi" onclick="parent.editdic('${dt_code}', '${di_key}');">编辑</a>
-							<s:if test="%{enable==2}">
-								<a href="javascript:void(0);" class="disc" onclick="updateDicState('${dt_code}', '${di_key}', 1);">禁用</a>
+							<s:if test="%{issys == 2}">
+								<a class="modi" style="color: gray">编辑</a>
 							</s:if>
 							<s:else>
-								<a href="javascript:void(0);" class="enable" onclick="updateDicState('${dt_code}', '${di_key}', 2);">启用</a>
+								<a href="javascript:void(0);" class="modi" onclick="parent.editdic('${dt_code}', '${di_key}');">编辑</a>
 							</s:else>
-					    	<s:if test="%{issys == 1}">
-					    		<a href="javascript:deleteDic('${dt_code}', '${di_key}');" class="del">删除</a>
+							<s:if test="%{enable==2}">
+								<s:if test="%{issys == 2}">
+									<a class="disc" style="color: gray">禁用</a>
+								</s:if>
+								<s:else>
+									<a href="javascript:void(0);" class="disc" onclick="updateDicState('${dt_code}', '${di_key}', 1);">禁用</a>
+								</s:else>
+							</s:if>
+							<s:else>
+								<s:if test="%{issys == 2}">
+									<a class="disc" style="color: gray">启用</a>
+								</s:if>
+								<s:else>
+									<a href="javascript:void(0);" class="enable" onclick="updateDicState('${dt_code}', '${di_key}', 2);">启用</a>
+								</s:else>
+							</s:else>
+					    	<s:if test="%{issys == 2}">
+					    		<a class="disc" style="color: gray">删除</a>
 					    	</s:if>
 					    	<s:else>
-					    		<a href="javascript:void(0);" class="disc" style="color: gray">删除</a>
+					    		<a href="javascript:deleteDic('${dt_code}', '${di_key}');" class="del">删除</a>
 					    	</s:else>
 					    </td>
 					</tr>
